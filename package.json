@@ -1,0 +1,26 @@
+{
+  "name": "playwrightapitest",
+  "version": "1.0.0",
+  "description": "Experimental project using Playwright for API testing",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ngocthubk/PlaywrightAPITest.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ngocthubk/PlaywrightAPITest/issues"
+  },
+  "homepage": "https://github.com/ngocthubk/PlaywrightAPITest#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.54.2",
+    "@types/node": "^24.1.0"
+  },
+  "dependencies": {
+    "csv-parse": "^6.1.0"
+  }
+}
