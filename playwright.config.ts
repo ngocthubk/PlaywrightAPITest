@@ -1,7 +1,7 @@
 import { PlaywrightTestConfig } from '@playwright/test';
 const config: PlaywrightTestConfig = {
   use: {
-    baseURL:  'https://petstore.swagger.io/v2/'
+    baseURL:  'https://restful-booker.herokuapp.com/'
   },
 };
 export default config;
