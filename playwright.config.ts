@@ -1,6 +1,7 @@
 import { defineConfig, PlaywrightTestConfig } from '@playwright/test';
-require('@dotenvx/dotenvx').config({ path: path.resolve(__dirname, './test-data', 'login.env') })
 import path from 'path';
+require('@dotenvx/dotenvx').config({ path: path.resolve(__dirname, './test-data', 'login.env') })
+
 
 export default defineConfig({
   use: {
