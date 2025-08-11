@@ -17,6 +17,10 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+    - name: Create .env.local
+      run: cp ./test-data/.env.sample ./test-data/.env.local
+    - name: Update the .env variables
+      run: dotenv -e ./test-data/.env.local -v username=${{ secrets.username }} -v password=${{ secrets.password }}
     - name: Run Playwright tests
       run: npx playwright test
     - uses: actions/upload-artifact@v4
