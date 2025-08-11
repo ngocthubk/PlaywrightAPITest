@@ -21,6 +21,7 @@
     "@types/node": "^24.1.0"
   },
   "dependencies": {
+    "@dotenvx/dotenvx": "^1.48.4",
     "csv-parse": "^6.1.0"
   }
 }

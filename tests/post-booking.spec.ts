@@ -5,25 +5,26 @@ import { parse } from 'csv-parse/sync';
 import { createToken } from '../helpers/token';
 import { Booking } from '../helpers/booking';
 
-var records;
-// const ids: Number[] = [];
-let id:number
+/* @Author: Thu Nguyen */
+let records;
 let tokenNumber: string;
-records = parse(fs.readFileSync(path.join(__dirname, '../testData/booking.csv')), {
+let booking: Booking
+records = parse(fs.readFileSync(path.join(__dirname, '../test-data/booking.csv')), {
   columns: true,
   skip_empty_lines: true,
   relax_quotes: true,
 });
-let booking: Booking
 
+// Setup
 test.beforeAll(async ({ request }) => {
-    tokenNumber = await createToken(request, "admin","password123")     
+
+  tokenNumber = await createToken(request, process.env.username!, process.env.password!)     
 })
 
 for (var record of records) {
-  test(`Create a booking ${record.firstname}  ${record.lastname}`, async ({ request }) => {
+  test(`POST Method - Create a booking ${record.firstname}  ${record.lastname}`, async ({ request }) => {
 
-    await test.step('1. Create a booking with the POST method',async()=>{
+    await test.step('1. Create a booking',async()=>{
       booking = await new Booking(record.firstname,record.lastname,Number(record.totalprice),
       JSON.parse(record.depositpaid),record.checkin,record.checkout,record.additionalneeds)
       let bkRes= await booking.createBooking(request)
@@ -34,14 +35,13 @@ for (var record of records) {
       await expect(bkRes.booking).toHaveProperty("totalprice", Number(record.totalprice));
       await expect(bkRes.booking).toHaveProperty("bookingdates", {checkin: record.checkin,
                 checkout: record.checkout});
-      // Store the id of a booking for cleaning up
-      id =bkRes.bookingid
-    }) 
-       
-});
+
+    })        
+  });
 }
 
+// Teardown
 test.afterEach(async ({ request }) => {
-  // Delete the bookings
+  // Delete the booking
   await booking.deleteBooking(request,tokenNumber)
 })

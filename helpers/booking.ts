@@ -1,6 +1,6 @@
 import { APIRequestContext } from '@playwright/test';
 
-
+/* @Author: Thu Nguyen */
 export class Booking{
 
     private firstname
@@ -40,19 +40,19 @@ export class Booking{
         const newBooking = await request.post(`booking`,{data: body});
         let bkJson= await newBooking.json();
         if(!newBooking.ok())
-          console.log("Cannot create a booking");
+            console.log("Cannot create a booking");
         else
             this.id = bkJson.bookingid
         
         return bkJson
-}
+    }
     async deleteBooking(request: APIRequestContext,token: string): Promise<any>{
         let header = {"Content-Type": "application/json",
             Cookie: `token=${token}`}
         const response = await request.delete(`booking/`+String(this.id),{headers: header});
 
         if(!response.ok())
-        console.log("Cannot delete a booking");
-        }
+            console.log("Cannot delete a booking");
+    }
 }
 
