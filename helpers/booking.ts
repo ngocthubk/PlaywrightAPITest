@@ -3,14 +3,14 @@ import { APIRequestContext } from '@playwright/test';
 /* @Author: Thu Nguyen */
 export class Booking{
 
-    private firstname
-    private lastname
-    private totalprice
-    private depositpaid
-    private checkin
-    private checkout
-    private additionalneeds
-    private id
+    private firstname: string
+    private lastname: string
+    private totalprice: number
+    private depositpaid: boolean
+    private checkin: string
+    private checkout: string
+    private additionalneeds: string
+    id: number
 
     /** Constructor for the class Booking
     @param firstname The firstname of the customer 
@@ -66,6 +66,7 @@ export class Booking{
     async deleteBooking(request: APIRequestContext,token: string): Promise<any>{
         let header = {"Content-Type": "application/json",
             Cookie: `token=${token}`}
+
         const response = await request.delete(`booking/`+String(this.id),{headers: header});
 
         if(!response.ok())
