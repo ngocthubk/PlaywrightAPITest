@@ -9,6 +9,7 @@ import { Booking } from '../helpers/booking';
 let records;
 let tokenNumber: string;
 let booking: Booking
+// Read the test data from the csv file
 records = parse(fs.readFileSync(path.join(__dirname, '../test-data/booking.csv')), {
   columns: true,
   skip_empty_lines: true,
@@ -28,7 +29,7 @@ for (var record of records) {
       booking = await new Booking(record.firstname,record.lastname,Number(record.totalprice),
       JSON.parse(record.depositpaid),record.checkin,record.checkout,record.additionalneeds)
       let bkRes= await booking.createBooking(request)
-
+      // Verify if the booking is created correctly
       await expect(bkRes.booking).toHaveProperty("firstname", record.firstname);
       await expect(bkRes.booking).toHaveProperty("lastname", record.lastname);
       await expect(bkRes.booking).toHaveProperty("depositpaid", JSON.parse(record.depositpaid));

@@ -12,6 +12,15 @@ export class Booking{
     private additionalneeds
     private id
 
+    /** Constructor for the class Booking
+    @param firstname The firstname of the customer 
+    @param lastname The lastname of the customer
+    @param totalprice The total price 
+    @param depositpaid The value shows if deposit is paid or not
+    @param checkin The checkin date of the booking
+    @param checkout The checkout date of the booking
+    @param additionalneeds The additional needs
+    */
     constructor(firstname:string,lastname:string, totalprice: number, depositpaid: boolean, 
         checkin: string, checkout: string, additionalneeds: string){
             this.firstname = firstname
@@ -24,6 +33,9 @@ export class Booking{
 
     }
 
+    /** Create a booking with the POST method  
+     * @param request The request of the type APIRequestContext
+    */
     async  createBooking(request: APIRequestContext): Promise<any>{
         let body = {
               firstname: this.firstname,
@@ -46,6 +58,11 @@ export class Booking{
         
         return bkJson
     }
+
+    /** Delete a booking with the DELETE method 
+     * @param request The request of the type APIRequestContext
+     * @param token Token for the permission required to delete a booking
+     * */  
     async deleteBooking(request: APIRequestContext,token: string): Promise<any>{
         let header = {"Content-Type": "application/json",
             Cookie: `token=${token}`}
