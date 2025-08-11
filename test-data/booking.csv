@@ -1,0 +1,5 @@
+firstname,lastname,totalprice,depositpaid,checkin,checkout,additionalneeds
+Anna,Müller,0,true,2025-07-31,2025-08-01,Breakfast
+Ti,Nguyen,1,false,2025-06-02,2025-06-04,
+Tuan,Nguyen,88,true,2025-02-28,2025-03-01,Breakfast and dinner
+Banane,Koch,7000,true,2024-02-29,2024-03-02,parking

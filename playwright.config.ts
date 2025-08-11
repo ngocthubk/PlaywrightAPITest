@@ -1,9 +1,12 @@
-import { PlaywrightTestConfig } from '@playwright/test';
-const config: PlaywrightTestConfig = {
+import { defineConfig, PlaywrightTestConfig } from '@playwright/test';
+import path from 'path';
+require('dotenv').config({ path: path.resolve(__dirname, './test-data', '.env.local') })
+
+export default defineConfig({
   use: {
     baseURL:  'https://restful-booker.herokuapp.com/'
   },
-};
-export default config;
+});
+
 
 
