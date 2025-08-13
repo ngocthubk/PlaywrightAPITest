@@ -42,7 +42,7 @@ export async function   createBooking(request: APIRequestContext,firstName:strin
 export async function  deleteBooking(request: APIRequestContext,id: number, token: string): Promise<any>{
         let header = {"Content-Type": "application/json",
             Cookie: `token=${token}`}
-        console.log('Debug in Pipeline ' + id + ' token is ' + token)
+        
         let response = await request.delete(`booking/`+String(id),{headers: header});
         // console.log("id in delete is " +id + " respone is " + await response.text())
         if(!response.ok())
