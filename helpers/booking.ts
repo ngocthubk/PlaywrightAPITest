@@ -57,9 +57,10 @@ export async function  deleteBooking(request: APIRequestContext,id: number, toke
 export async function  getBooking(request: APIRequestContext,id: number): Promise<any>{
         let response = await request.get(`booking/` + String(id))
         
-        let rspJson= await response.json();
-        
-        return rspJson
+        if (response.ok())
+            return await response.json();
+        else
+            return response
 
 }
 
