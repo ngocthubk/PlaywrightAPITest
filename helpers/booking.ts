@@ -2,9 +2,16 @@ import { APIRequestContext } from '@playwright/test';
 
 /* @Author: Thu Nguyen */
 
-    /** Create a booking with the POST method  
-     * @param request The request of the type APIRequestContext
-    */
+/** Create a booking with the POST method  
+* @param request The request of the type APIRequestContext
+* @param firstname The firstname of the customer 
+  @param lastname The lastname of the customer
+  @param totalprice The total price 
+  @param depositpaid The value shows if deposit is paid or not
+  @param checkin The checkin date of the booking
+  @param checkout The checkout date of the booking
+  @param additionalneeds The additional needs
+*/
 export async function   createBooking(request: APIRequestContext,firstName:string,lastName:string, totalPrice: number, depositPaid: boolean, 
         checkIn: string, checkOut: string, additionalNeeds: string): Promise<any>{
         let body = {
@@ -27,25 +34,31 @@ export async function   createBooking(request: APIRequestContext,firstName:strin
         return bkJson
     };
 
-    /** Delete a booking with the DELETE method 
-     * @param request The request of the type APIRequestContext
-     * @param token Token for the permission required to delete a booking
-     * */  
+/** Delete a booking with the DELETE method 
+* @param request The request of the type APIRequestContext
+* @param id The Id of the booking you want to get
+* @param token Token for the permission required to delete a booking
+*/  
 export async function  deleteBooking(request: APIRequestContext,id: number, token: string): Promise<any>{
         let header = {"Content-Type": "application/json",
             Cookie: `token=${token}`}
 
         let response = await request.delete(`booking/`+String(id),{headers: header});
-
+        // console.log("id in delete is " +id + " respone is " + await response.text())
         if(!response.ok())
             console.log("Cannot delete a booking");
-        return await response.json()
+        return response
 }
-
+/**
+ * Get a booking with the GET method
+ * @param request The request of the type APIRequestContext
+ * @param id The Id of the booking you want to get
+ */
 export async function  getBooking(request: APIRequestContext,id: number): Promise<any>{
         let response = await request.get(`booking/` + String(id))
+        
         let rspJson= await response.json();
-
+        
         return rspJson
 
 }
