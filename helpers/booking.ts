@@ -42,7 +42,7 @@ export async function   createBooking(request: APIRequestContext,firstName:strin
 export async function  deleteBooking(request: APIRequestContext,id: number, token: string): Promise<any>{
         let header = {"Content-Type": "application/json",
             Cookie: `token=${token}`}
-
+        
         let response = await request.delete(`booking/`+String(id),{headers: header});
         // console.log("id in delete is " +id + " respone is " + await response.text())
         if(!response.ok())
@@ -57,9 +57,10 @@ export async function  deleteBooking(request: APIRequestContext,id: number, toke
 export async function  getBooking(request: APIRequestContext,id: number): Promise<any>{
         let response = await request.get(`booking/` + String(id))
         
-        let rspJson= await response.json();
-        
-        return rspJson
+        if (response.ok())
+            return await response.json();
+        else
+            return response
 
 }
 

@@ -7,7 +7,7 @@ import { createBooking, deleteBooking } from '../helpers/booking';
 
 /* @Author: Thu Nguyen */
 
-test.describe('Get a booking', async () => {
+test.describe('Create a booking', async () => {
   let records;
   let tokenNumber: string;
   let id:number
