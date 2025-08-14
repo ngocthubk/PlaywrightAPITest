@@ -34,12 +34,14 @@ test.describe('Update a booking', async () => {
         let newFrstName 
         let newLstname
         let newPrice 
+        let need
 
         await test.step('1. Update a booking',async()=>{
             newFrstName = faker.name.firstName();
             newLstname = faker.name.lastName()
             newPrice = faker.number.int()
-          booking = await updateBooking(request,tokenNumber,id,newFrstName,newLstname,newPrice)
+            need = "Lunch"
+          booking = await updateBooking(request,tokenNumber,id,{fName: newFrstName,lName:newLstname,price:newPrice,  addNeeds:need})
                     
         }) 
         await test.step('2. Check the response',async()=>{ 
@@ -47,6 +49,10 @@ test.describe('Update a booking', async () => {
           await expect(booking).toHaveProperty("firstname", newFrstName);
           await expect(booking).toHaveProperty("lastname", newLstname);         
           await expect(booking).toHaveProperty("totalprice",newPrice);
+          await expect(booking).toHaveProperty("additionalneeds",need);
+          await expect(booking).toHaveProperty("bookingdates", {checkin: record.checkin,
+                checkout: record.checkout});
+          await expect(booking).toHaveProperty("depositpaid", JSON.parse(record.depositpaid));
 
         })        
         
@@ -55,7 +61,7 @@ test.describe('Update a booking', async () => {
       // Teardown
     test.afterEach(async ({ request }) => {
       // Delete the booking
-      await deleteBooking(request,id,tokenNumber)
+      await deleteBooking(request,tokenNumber,id)
     })
 
 })
