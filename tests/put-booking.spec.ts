@@ -37,8 +37,8 @@ test.describe('Update a booking', async () => {
         let need
 
         await test.step('1. Update a booking',async()=>{
-            newFrstName = faker.name.firstName();
-            newLstname = faker.name.lastName()
+            newFrstName = faker.person.firstName();
+            newLstname = faker.person.lastName()
             newPrice = faker.number.int()
             need = "Lunch"
           booking = await updateBooking(request,tokenNumber,id,{fName: newFrstName,lName:newLstname,price:newPrice,  addNeeds:need})
