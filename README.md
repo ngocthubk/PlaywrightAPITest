@@ -6,7 +6,7 @@ This does not focus on covering the behaviours of the API. The requirements are 
 https://restful-booker.herokuapp.com/
 ### Test data
 Data is read from a csv file
-## Author
+### Author
 <p> Name: Thu Nguyen
 <p/>
 <p> Email: ngocthubk@gmail.com
