@@ -64,3 +64,34 @@ export async function  getBooking(request: APIRequestContext,id: number): Promis
 
 }
 
+/**
+ * Update a booking with the PUT method
+ * @param request The request of the type APIRequestContext
+ * @param id The Id of the booking you want to get
+ */
+export async function  updateBooking(request: APIRequestContext,token: string,id: number, fName?:string,lName?:string, price?: number, deposit?: boolean, 
+        chin?: string, chout?: string, addNeeds?: string): Promise<any>{
+            let oldBooking = await getBooking(request,id)
+            let body = {
+              firstname: fName ? fName:oldBooking.firstname,
+              lastname: lName ? lName:oldBooking.lastname,
+              totalprice: price ? price:oldBooking.totalprice,
+              depositpaid: deposit ? deposit:oldBooking.depositpaid,
+              bookingdates:{
+                checkin: chin ? chin:oldBooking.bookingdates.checkin,
+                checkout: chout ? chout:oldBooking.bookingdates.checkout
+              },
+              additionalneeds: addNeeds ? addNeeds:oldBooking.additionalneeds
+            } 
+        
+            let header = {"Content-Type": "application/json",
+            Cookie: `token=${token}`}
+            let response = await request.put(`booking/` + String(id),{data: body, headers: header})
+           
+            if (response.ok())
+                return await response.json();
+            else
+                return response
+
+}
+
