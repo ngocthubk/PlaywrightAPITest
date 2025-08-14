@@ -7,5 +7,8 @@ https://restful-booker.herokuapp.com/
 ### Test data
 Data is read from a csv file
 ## Author
-Name: Thu Nguyen
-Email: ngocthubk@gmail.com
+<p> Name: Thu Nguyen
+<p/>
+<p> Email: ngocthubk@gmail.com
+</p>
+
