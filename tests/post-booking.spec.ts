@@ -48,6 +48,6 @@ test.describe('Create a booking', async () => {
 // Teardown
   test.afterEach(async ({ request }) => {
     // Delete the booking
-    await deleteBooking(request,id,tokenNumber)
+    await deleteBooking(request,tokenNumber,id)
   })
 })

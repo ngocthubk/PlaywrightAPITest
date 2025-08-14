@@ -3,10 +3,11 @@ import path from 'path';
 import { request,test, expect } from '@playwright/test';
 import { parse } from 'csv-parse/sync';
 import { createToken } from '../helpers/token';
-import { createBooking, deleteBooking, getBooking } from '../helpers/booking';
+import { createBooking, deleteBooking, getBooking, updateBooking } from '../helpers/booking';
+import { faker } from '@faker-js/faker';
   
 
-test.describe('Get a booking', async () => {
+test.describe('Update a booking', async () => {
     let id: number
     let records;
 
@@ -28,19 +29,30 @@ test.describe('Get a booking', async () => {
         tokenNumber = await createToken(request, process.env.username!, process.env.password!)
     })
 
-    test(`GET Method - Get a booking with the Id`, async ({ request }) => {
+    test(`PUT Method - Update a booking with the Id`, async ({ request }) => {
         let booking 
-        await test.step('1. Get a booking',async()=>{
-          booking = await getBooking(request,id)
+        let newFrstName 
+        let newLstname
+        let newPrice 
+        let need
+
+        await test.step('1. Update a booking',async()=>{
+            newFrstName = faker.name.firstName();
+            newLstname = faker.name.lastName()
+            newPrice = faker.number.int()
+            need = "Lunch"
+          booking = await updateBooking(request,tokenNumber,id,{fName: newFrstName,lName:newLstname,price:newPrice,  addNeeds:need})
                     
         }) 
-        await test.step('2. Check the response',async()=>{                    
-          await expect(booking).toHaveProperty("firstname", record.firstname);
-          await expect(booking).toHaveProperty("lastname", record.lastname);
-          await expect(booking).toHaveProperty("depositpaid", JSON.parse(record.depositpaid));
-          await expect(booking).toHaveProperty("totalprice", Number(record.totalprice));
+        await test.step('2. Check the response',async()=>{ 
+                             
+          await expect(booking).toHaveProperty("firstname", newFrstName);
+          await expect(booking).toHaveProperty("lastname", newLstname);         
+          await expect(booking).toHaveProperty("totalprice",newPrice);
+          await expect(booking).toHaveProperty("additionalneeds",need);
           await expect(booking).toHaveProperty("bookingdates", {checkin: record.checkin,
-                    checkout: record.checkout});
+                checkout: record.checkout});
+          await expect(booking).toHaveProperty("depositpaid", JSON.parse(record.depositpaid));
 
         })        
         

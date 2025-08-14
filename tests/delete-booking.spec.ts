@@ -31,7 +31,7 @@ test.describe('Delete a booking', async () => {
     test(`DELETE Method - Delete a booking with the Id`, async ({ request }) => {
         let response 
         await test.step('1. Delete a booking',async()=>{
-          response = await deleteBooking(request,id,tokenNumber)
+          response = await deleteBooking(request,tokenNumber,id)
                     
         }) 
         await test.step('2. Check the response',async()=>{ 
