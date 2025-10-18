@@ -4,6 +4,8 @@ import { request,test, expect } from '@playwright/test';
 import { parse } from 'csv-parse/sync';
 import { createToken } from '../helpers/token';
 import { createBooking, deleteBooking, getBooking } from '../helpers/booking';
+import {getBookingData} from '../helpers/data-factory/booking'
+import { format } from 'date-fns';
   
 
 test.describe('Get a booking', async () => {
@@ -11,18 +13,21 @@ test.describe('Get a booking', async () => {
     let records;
 
     // Read the test data from the csv file
-    records = parse(fs.readFileSync(path.join(__dirname, '../test-data/booking.csv')), {
-      columns: true,
-      skip_empty_lines: true,
-      relax_quotes: true,
-    });
-    let record = records![0];
+    // records = parse(fs.readFileSync(path.join(__dirname, '../test-data/booking.csv')), {
+    //   columns: true,
+    //   skip_empty_lines: true,
+    //   relax_quotes: true,
+    // });
+    let record:any ;
     let tokenNumber: string;
     // Setup
     test.beforeEach(async ({ request }) => {
-        
+        records = await getBookingData()
+        record = records![0];
+        console.log("check in is " + record.checkin)
+        console.log("check out is " + record.checkout)
         let bkRsp = await createBooking(request,record.firstname,record.lastname,Number(record.totalprice),
-          JSON.parse(record.depositpaid),record.checkin,record.checkout,record.additionalneeds) 
+          JSON.parse(record.depositpaid),format(record.checkin,"yyyy/MM/dd"),format(record.checkout,"yyyy/MM/dd"),record.additionalneeds) 
         id = bkRsp.bookingid        
         
         tokenNumber = await createToken(request, process.env.username!, process.env.password!)
@@ -34,13 +39,15 @@ test.describe('Get a booking', async () => {
           booking = await getBooking(request,id)
                     
         }) 
-        await test.step('2. Check the response',async()=>{                    
+        await test.step('2. Check the response',async()=>{  
+          let formatedin = format(record.checkin,"yyyy-MM-dd")
+          let formatedout = format(record.checkout,"yyyy-MM-dd")
           await expect(booking).toHaveProperty("firstname", record.firstname);
           await expect(booking).toHaveProperty("lastname", record.lastname);
           await expect(booking).toHaveProperty("depositpaid", JSON.parse(record.depositpaid));
           await expect(booking).toHaveProperty("totalprice", Number(record.totalprice));
-          await expect(booking).toHaveProperty("bookingdates", {checkin: record.checkin,
-                    checkout: record.checkout});
+          await expect(booking).toHaveProperty("bookingdates", {checkin: formatedin,
+                    checkout: formatedout});
 
         })        
         
