@@ -25,7 +25,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: setup the database
-      run: pg_restore -h localhost -p 5432 -U postgres -W My:s3Cr3t/ -d booking_db  ./test-data/booking.tar
+      run: |
+        export PGPASSWORD="My:s3Cr3t/"
+        pg_restore -h localhost -p 5432 -U postgres -d booking_db  ./test-data/booking.tar
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
