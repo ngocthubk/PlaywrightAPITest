@@ -38,7 +38,7 @@ jobs:
     - name: Install dotenv-cli
       run: npm i -g dotenv-cli
     - name: Run Playwright tests
-      run: dotenv -e ./test-data/.env.sample -v password=${{ secrets.password }} -v username=${{ secrets.username }}  -v DB_HOST=${{ vars.DB_HOST }} -v DB_PORT=${{ vars.DB_PORT }} -v DB_NAME= ${{ vars.DB_NAME }} -v DB_USER = ${{ vars.DB_USER }} -v DB_PASSWORD = ${{ secrets.DB_PASSWORD }} -- npx playwright test
+      run: dotenv -e ./test-data/.env.sample -v password=${{ secrets.password }} -v username=${{ secrets.username }}  -v DB_HOST=${{ vars.DB_HOST }} -v DB_PORT=${{ vars.DB_PORT }} -v DB_NAME=${{ vars.DB_NAME }} -v DB_USER=${{ vars.DB_USER }} -v DB_PASSWORD=${{ secrets.DB_PASSWORD }} -- npx playwright test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
