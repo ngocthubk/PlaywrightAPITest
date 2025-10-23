@@ -10,7 +10,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:15
+        image: postgres:14.19
         env:
           POSTGRES_DB: booking_db
           POSTGRES_USER: postgres
@@ -24,8 +24,10 @@ jobs:
           --health-retries 5
     steps:
     - uses: actions/checkout@v4
-    - name: setup the database
-      run: pg_restore -h localhost -p 5432 -U postgres -d booking_db  ./test-data/booking.tar
+    - name: Setup the database
+      run: |
+        export PGPASSWORD="My:s3Cr3t/"
+        pg_restore -h localhost -p 5432 -U postgres -d booking_db  ./test-data/booking.tar
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
@@ -36,7 +38,7 @@ jobs:
     - name: Install dotenv-cli
       run: npm i -g dotenv-cli
     - name: Run Playwright tests
-      run: dotenv -e ./test-data/.env.sample -v password=${{ secrets.password }} -v username=${{ secrets.username }}  -- npx playwright test
+      run: dotenv -e ./test-data/.env.sample -v password=${{ secrets.password }} -v username=${{ secrets.username }}  -v DB_HOST=${{ vars.DB_HOST }} -v DB_PORT=${{ vars.DB_PORT }} -v DB_NAME=${{ vars.DB_NAME }} -v DB_USER=${{ vars.DB_USER }} -v DB_PASSWORD=${{ secrets.DB_PASSWORD }} -- npx playwright test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:

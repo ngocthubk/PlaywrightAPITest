@@ -4,46 +4,53 @@ import { request,test, expect } from '@playwright/test';
 import { parse } from 'csv-parse/sync';
 import { createToken } from '../helpers/token';
 import { createBooking, deleteBooking } from '../helpers/booking';
+import { getBookingData} from '../helpers/data-factory/booking'
+import { format } from 'date-fns';
 
 /* @Author: Thu Nguyen */
 
+
+  // let records;
+let records : {firstname: string,lastname: string,totalprice:number,depositpaid:boolean,checkin:string,checkout:string,additionalneeds:string}[]
+let tokenNumber: string;
+let id:number
+// Read the test data from the csv file
+
 test.describe('Create a booking', async () => {
-  let records;
-  let tokenNumber: string;
-  let id:number
-  // Read the test data from the csv file
-  records = parse(fs.readFileSync(path.join(__dirname, '../test-data/booking.csv')), {
-  columns: true,
-  skip_empty_lines: true,
-  relax_quotes: true,
+  // Setup
+
+  test.beforeAll(async ({ request }) => {
+    records =  await getBookingData()
+    tokenNumber = await createToken(request, process.env.username!, process.env.password!) 
+      
   });
 
-  // Setup
-  test.beforeAll(async ({ request }) => {
 
-    tokenNumber = await createToken(request, process.env.username!, process.env.password!)     
-  })
+  // Skip the entire file if no users are found to prevent errors
+// test.skip(!!records && records.length === 0, 'No users found in database');
 
-  for (var record of records) {
-    test(`POST Method - Create a booking ${record.firstname}  ${record.lastname}`, async ({ request }) => {
-      let bkRes
+[0,1,2,3].forEach((i)=>{
+  test(`POST Method - Create a booking ${i}`, async ({ request}) => {
+     let bkRes
+     let record = records[i]
       await test.step('1. Create a booking',async()=>{
-        bkRes= await createBooking(request,record.firstname,record.lastname,Number(record.totalprice),
-        JSON.parse(record.depositpaid),record.checkin,record.checkout,record.additionalneeds)      
+        bkRes= await createBooking(request,record.firstname,record.lastname,record.totalprice,
+        record.depositpaid,format(record.checkin,"yyyy/MM/dd"),format(record.checkout,"yyyy/MM/dd"),record.additionalneeds)      
       })
       await test.step('2. Check the response',async()=>{
       
         await expect(bkRes.booking).toHaveProperty("firstname", record.firstname);
         await expect(bkRes.booking).toHaveProperty("lastname", record.lastname);
-        await expect(bkRes.booking).toHaveProperty("depositpaid", JSON.parse(record.depositpaid));
+        await expect(bkRes.booking).toHaveProperty("depositpaid", Boolean(record.depositpaid));
         await expect(bkRes.booking).toHaveProperty("totalprice", Number(record.totalprice));
-        await expect(bkRes.booking).toHaveProperty("bookingdates", {checkin: record.checkin,
-                checkout: record.checkout});
+        await expect(bkRes.booking).toHaveProperty("bookingdates", {checkin: format(record.checkin,"yyyy-MM-dd"),
+                checkout: format(record.checkout,"yyyy-MM-dd")});
       
       })   
       id=bkRes.bookingid     
   });
-}
+})
+
 
 // Teardown
   test.afterEach(async ({ request }) => {

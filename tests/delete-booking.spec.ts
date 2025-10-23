@@ -4,23 +4,19 @@ import { request,test, expect } from '@playwright/test';
 import { parse } from 'csv-parse/sync';
 import { createToken } from '../helpers/token';
 import { createBooking, deleteBooking, getBooking } from '../helpers/booking';
-  
+import { getBookingData } from '../helpers/data-factory/booking';
 
 test.describe('Delete a booking', async () => {
     let id: number
     let records;
 
-    // Read the test data from the csv file
-    records = parse(fs.readFileSync(path.join(__dirname, '../test-data/booking.csv')), {
-      columns: true,
-      skip_empty_lines: true,
-      relax_quotes: true,
-    });
-    let record = records![0];
+  
+    let record 
     let tokenNumber: string;
     // Setup
     test.beforeEach(async ({ request }) => {
-        
+      records =  await getBookingData()  
+      record = records![0];
         let bkRsp = await createBooking(request,record.firstname,record.lastname,Number(record.totalprice),
           JSON.parse(record.depositpaid),record.checkin,record.checkout,record.additionalneeds) 
         id = bkRsp.bookingid        
