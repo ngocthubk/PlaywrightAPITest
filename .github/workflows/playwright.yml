@@ -12,11 +12,11 @@ jobs:
       postgres:
         image: postgres:14.19
         env:
-          POSTGRES_DB: booking_db
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: My:s3Cr3t/
+          POSTGRES_DB: ${{ vars.DB_NAME }}
+          POSTGRES_USER: ${{ vars.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
         ports:
-          - 5432:5432
+          - ${{ vars.DB_PORT }}:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -26,8 +26,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: Setup the database
       run: |
-        export PGPASSWORD="My:s3Cr3t/"
-        pg_restore -h localhost -p 5432 -U postgres -d booking_db  ./test-data/booking.tar
+        export PGPASSWORD=${{ secrets.DB_PASSWORD }}
+        pg_restore -h ${{ vars.DB_HOST }} -p ${{ vars.DB_PORT }} -U ${{ vars.DB_USER }} -d ${{ vars.DB_NAME }}  ./test-data/booking.tar
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
