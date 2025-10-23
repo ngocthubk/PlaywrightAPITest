@@ -9,12 +9,14 @@ Data is read from a PostgreSQL database, which is set up in a Docker container.
 ### How to view the test result in Github
 
 1. Go to the tab Actions,
+   
 2. Click on a workflow run you want to view,
+   
 3. Click on "test" to view the test results of this run.
    
 ### How to run the test locally
 1. Clone the project to the local machine.
-2. Set up the PostgreSQL database for the input data
+2. Set up the PostgreSQL database for the input data.
    Do the following steps, if the you want to run a containerized database
 
    2.1. Install psql command line
