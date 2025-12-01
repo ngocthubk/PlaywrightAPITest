@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: real
+  labels:
+    app: realworld
+  annotations:
+    cni.cilium.io/mac-address: e2:9c:30:38:52:61
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: realworld
+  template:
+    metadata:
+      labels:
+        app: realworld
+    spec:
+      containers:
+      - name: realworld
+        image: thunguyen18/cypressreactrecoilrealworld
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: real
+  namespace: ingress-basic
+
+spec:
+  ports:
+    - port: 3000
+      protocol: TCP
+      targetPort: 3000
+  selector:
+    app: realworld
+  type: LoadBalance
